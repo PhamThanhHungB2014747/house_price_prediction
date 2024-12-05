@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách Biểu đồ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center; /* Căn giữa nội dung trong body */
+        }
+        .chart-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around; /* Để các biểu đồ cân bằng */
+            margin: 20px;
+        }
+        .chart-item {
+            flex: 1 1 30%; /* Căn chỉnh các biểu đồ chiếm 30% chiều rộng */
+            margin: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        img {
+            width: 100%; /* Để hình ảnh tự động điều chỉnh chiều rộng */
+            height: auto; /* Đảm bảo tỷ lệ hình ảnh không bị biến dạng */
+        }
+        h1 {
+            text-align: center;
+        }
+        h2 {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 20px auto; /* Tạo khoảng cách cho nút */
+            background-color: #007bff; /* Màu nền */
+            color: white; /* Màu chữ */
+            text-align: center;
+            text-decoration: none; /* Bỏ gạch chân */
+            border-radius: 5px; /* Bo tròn góc */
+            transition: background-color 0.3s; /* Hiệu ứng chuyển màu khi hover */
+        }
+        .button:hover {
+            background-color: #0056b3; /* Màu nền khi hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>Danh sách Biểu đồ</h1>
+    <div class="chart-container">
+        {% for title, image in charts.items() %}
+            <div class="chart-item">
+                <h2>{{ title }}</h2>
+                <img src="{{ image }}" alt="{{ title }}">
+            </div>
+        {% endfor %}
+    </div>
+    <a href="/" class="button">Quay lại</a> <!-- Nút được căn giữa -->
+</body>
+</html>

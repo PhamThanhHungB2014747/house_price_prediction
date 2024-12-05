@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dự đoán giá nhà</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: bold;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+        .mid {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 20px auto; /* Tạo khoảng cách cho nút */
+            background-color: #007bff; /* Màu nền */
+            color: white; /* Màu chữ */
+            text-align: center;
+            text-decoration: none; /* Bỏ gạch chân */
+            border-radius: 5px; /* Bo tròn góc */
+            transition: background-color 0.3s; /* Hiệu ứng chuyển màu khi hover */
+        }
+        .mid:hover {
+            background-color: #0056b3; /* Màu nền khi hover */
+        }
+    </style>
+    <script>
+        const locations = {
+            'Cần Thơ': ['Quận Ninh Kiều', 'Quận Cái Răng', 'Quận Bình Thủy', 'Quận Thốt Nốt', 'Quận Ô Môn', 'Huyện Phong Điền', 'Huyện Vĩnh Thạnh'],
+            'Hà Nội': ['Quận Hoàn Kiếm', 'Quận Đống Đa', 'Quận Hai Bà Trưng', 'Quận Nam Từ Liêm', 'Quận Ba Đình', 'Quận Long Biên', 'Quận Cầu Giấy', 'Quận Bắc Từ Liêm', 'Quận Tây Hồ', 'Quận Thanh Xuân', 'Quận Hoàng Mai', 'Quận Hà Đông', 'Huyện Ba Vì', 'Huyện Chương Mỹ', 'Huyện Đan Phượng', 'Huyện Đông Anh', 'Huyện Gia Lâm', 'Huyện Hoài Đức', 'Huyện Mê Linh', 'Huyện Mỹ Đức', 'Huyện Phú Xuyên', 'Huyện Phúc Thọ', 'Huyện Quốc Oai', ' Huyện Sóc Sơn', 'Huyện Thạch Thất', 'Huyện Thanh Oai', 'Huyện Thanh Trì', 'Huyện Thường Tín', 'Huyện Ứng Hòa', 'Thị xã Sơn Tây'],
+            'Đà Nẵng': ['Quận Hải Châu', 'Quận Sơn Trà', 'Quận Liên Chiểu', 'Quận Thanh Khê', 'Quận Ngũ Hành Sơn', 'Quận Cẩm Lệ', 'Huyện Hoa Vàng'],
+            'TP Hồ Chí Minh': ['Quận Nhất', 'Quận Ba', 'Quận Năm', 'Quận Tư', 'Quận Sáu', 'Quận Bảy', 'Quận Tám', 'Quận Mười', 'Quận Mười Một', 'Quận Mười Hai', 'Quận Bình Tân', 'Quận Bình Thạnh', 'Quận Gò Vấp', 'Quận Phú Nhuận', 'Quận Tân Bình', 'Quận Tân Phú', 'Thành phố Thủ Đức', 'Huyện Bình Chánh', 'Huyện Cần Giờ', 'Huyện Củ Chi', 'Huyện Hóc Môn', 'Huyện Nhà Bè']
+        };
+
+        function updateLocations() {
+            const regionSelect = document.getElementById('region');
+            const districtSelect = document.getElementById('district');
+            const selectedRegion = regionSelect.value;
+
+            // Clear current options
+            districtSelect.innerHTML = '';
+
+            if (selectedRegion) {
+                locations[selectedRegion].forEach(location => {
+                    const option = document.createElement('option');
+                    option.value = location;
+                    option.textContent = location;
+                    districtSelect.appendChild(option);
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Dự đoán giá nhà</h1>
+    <form method="post">
+        <label for="region">Chọn khu vực:</label>
+        <select name="region" id="region" required onchange="updateLocations()">
+            <option value="">--Chọn khu vực--</option>
+            <option value="Cần Thơ">Cần Thơ</option>
+            <option value="Hà Nội">Hà Nội</option>
+            <option value="Đà Nẵng">Đà Nẵng</option>
+            <option value="TP Hồ Chí Minh">TP Hồ Chí Minh</option>
+        </select>
+
+        <label for="property_type">Loại hình:</label>
+        <select name="property_type" id="property_type" required>
+            <option value="Nhà ở">Nhà ở</option>
+            <option value="Chung cư">Chung cư</option>
+        </select>
+
+        <label for="district">Vị trí:</label>
+        <select name="district" id="district" required>
+            <option value="">--Chọn vị trí--</option>
+        </select>
+
+        <label for="num_rooms">Số phòng:</label>
+        <input type="number" name="num_rooms" id="num_rooms" required style="width:97%">
+
+        <label for="area">Diện tích (m²):</label>
+        <input type="number" name="area" id="area" required style="width:97%">
+
+        <button type="submit">Dự đoán</button>
+    </form>
+
+    {% if predicted_price %}
+        <div class="result">
+            <h2>Giá dự đoán: {{ predicted_price | round(2) }} tỷ đồng</h2>
+        </div>
+        {% if image_path %}
+                <img src="{{ image_path }}" alt="Kết quả dự đoán" style="max-width: 100%; height: auto;">
+        {% endif %}
+    {% elif no_price_message %}
+        <div class="result">
+            <h2>{{ no_price_message }}</h2>
+        </div>
+    {% endif %}
+    <div style="text-align:center;">
+        <a href="/charts" class="mid">Xem danh sách biểu đồ</a>
+    </div>
+</body>
+</html>
